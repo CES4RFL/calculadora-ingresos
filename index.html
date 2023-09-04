@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de ingresos</title>
+</head>
+<style>
+    ul {
+        list-style-type: none;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+    .resume_salary{
+        text-align: center;
+    }
+    #form_calculate{
+        padding-bottom: 1rem;
+    }
+</style>
+<body>
+    <div class="title">
+        <h1>Calculadora de ingresos</h1>
+    </div>
+    <div class="form_ingress">
+        <form id="form_calculate" action="javascript:calculateResultSalary()">
+            <ul>
+                <li>
+                  <label for="base_salary">Sueldo base: </label>
+                  <input type="number"  step="0.01"  id="base_salary" name="base_salary" />
+                </li>
+                <li>
+                  <label for="work_hour">Horas trabajadas: </label>
+                  <input type="number" id="work_hour" name="work_hour" />
+                </li>
+               
+            </ul>
+            <input type="submit" class="submit_form_button" value="Calcular">
+        </form>
+        <button onclick="clean()">Limpiar</button>
+    </div>
+    <div class="result_table">
+        <table id="salary_sumary">
+            <tr>
+              <th>Sueldo base</th>
+              <th>Horas trabajadas</th>
+              <th>Sueldo final</th>
+            </tr>
+        </table>
+    </div>
+    <div class="resume_salary">
+        <h1>Ingreso total</h1>
+        <h1 id="total_salary"></h1>
+    </div>
+
+    <script>    
+
+        let totalSalary=0;
+        
+        const calculateResultSalary = () => {      
+    
+            //Obtiene los elementos del dom para los inputs del formulario
+            let baseSalary = document.getElementById("base_salary").value 
+            let workHour = document.getElementById("work_hour").value
+    
+            //Valida que es posible convertirlo en número
+            baseSalary = parseFloat(baseSalary)
+            workHour = parseFloat(workHour)
+    
+            //Obtiene el resultado de la multiplicacion de horas x salario base
+            resultSalary =  baseSalary*workHour
+    
+            //Obtiene el elemento de la tabla del DOM
+            const tbodyRef = document.getElementById('salary_sumary').getElementsByTagName('tbody')[0]
+    
+            // Inserta una fila en el elemento de referencia de la tabla
+            const newRow = tbodyRef.insertRow()
+    
+            const arrayItems = [baseSalary,workHour,resultSalary];
+    
+            // Inserta 3 filas correspondientes al sueldo base, horas trabajadas y el calculo final de las horas x el salario base
+            for(let iterator=0; iterator<=arrayItems.length-1; iterator++){
+                const newCell = newRow.insertCell()
+                newCell.appendChild(document.createTextNode(arrayItems[iterator]))
+            }
+    
+            //Agrega el valor del calculo reciente al acumulado para el resumen final
+            totalSalary += resultSalary
+    
+            //Se agrega el texto con el salario actualizado al arbol del DOM
+            document.getElementById("total_salary").innerHTML = "$" + totalSalary
+        }
+    
+        const clean = () => {
+    
+            //Borra el valor del elemento en el DOM que muestra el total de ingresos
+            document.getElementById("total_salary").innerHTML = ""
+            //Configura un valor en 0 para el contador global que mantiene la cuenta del total de ingresos
+            totalSalary=0
+            //Borra los elementos de DOM que pertenecen a la tabla que registra los ingresos
+            const table = document.getElementById('salary_sumary')
+            while(table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+        }
+    </script>
+</body>
+</html>
